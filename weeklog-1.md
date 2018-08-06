@@ -36,3 +36,16 @@ Under insfrastructure/provision you find aws cloudformation template to provisio
 
 #### AWS EC2 Instance configuration 
 
+Under infrastructure/configure/cookbooks you find chef cookbooks and recipes to install all software required by WeeklogApp to be functional on a ec2 instance.
+
+So far, we have built a CICD pipeline that allows us, with only a couple of clicks, to deploy WeeklogApp in the production environment. Everything looks like the work is done for this application in terms of continuous delivery. 
+
+However, throughtout our CICD pipeline there're several stages were WeeklogApp gets deployed in QA 1 QA 2, UAT and PROD environments. Confusingly, believe it or not, WeeklogApp is deployed in a different fashion on each of above environments.
+
+Even though, all fashions use the same infrastructure/provision scripts, they prepare them differently and all fashions are implemented in separated jenkins jobs.
+
+At this point, you might have identified what the problem is. If we introduce a new change in any provisioining script we don't have certainty it will function the same in every CICD stage as they are used differently.
+
+My challenge this week was to come up with a unified way to deploy WeeklogApp indepedent of the stage. It should only take input parameters, prepare infrastructre/provision scripts and execute them against according aws account.
+
+The output of the challenge was a Jenkinsfile.
